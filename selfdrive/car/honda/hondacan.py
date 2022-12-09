@@ -133,12 +133,14 @@ def create_ui_commands(packer, CP, enabled, pcm_speed, hud, is_metric, acc_hud, 
     commands.append(packer.make_can_msg("ACC_HUD", bus_pt, acc_hud_values))
 
   lkas_hud_values = {
-    'SET_ME_X41': 0x41,
+    'SET_ME_X41': 0x41 if enabled else 0x0,
     'STEERING_REQUIRED': hud.steer_required,
     'SOLID_LANES': hud.lanes_visible,
     'BEEP': 0,
   }
 
+  if CP.carFingerprint not in HONDA_BOSCH:
+    lkas_hud_values['SET_ME_X4'] = lkas_hud['SET_ME_X4']
   if CP.carFingerprint in HONDA_BOSCH_RADARLESS:
     lkas_hud_values['LANE_LINES'] = 3
     lkas_hud_values['DASHED_LANES'] = hud.lanes_visible
