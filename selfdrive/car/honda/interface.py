@@ -238,7 +238,8 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 16.0  # as spec
       ret.lateralParams.torqueBP, ret.lateralParams.torqueV = [[0, 4096], [0, 4096]]  # TODO: determine if there is a dead zone at the top end
       tire_stiffness_factor = 0.444
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.38], [0.11]]
+      # ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.38], [0.11]]
+      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
 
     elif candidate == CAR.RIDGELINE:
       ret.mass = 4515. * CV.LB_TO_KG + STD_CARGO_KG
