@@ -133,7 +133,10 @@ class CarController:
 
     if CC.longActive:
       accel = actuators.accel
-      gas, brake = compute_gas_brake(actuators.accel, CS.out.vEgo, self.CP.carFingerprint)
+      if actuators.gas is not None and actuators.brake is not None:
+        gas, brake = actuators.gas, actuators.brake
+      else:
+        gas, brake = compute_gas_brake(actuators.accel, CS.out.vEgo, self.CP.carFingerprint)
     else:
       accel = 0.0
       gas, brake = 0.0, 0.0
@@ -198,6 +201,11 @@ class CarController:
                      clip(CS.out.vEgo + 5.0, 0.0, 100.0)]
       pcm_speed = interp(gas - brake, pcm_speed_BP, pcm_speed_V)
       pcm_accel = int(clip((accel / 1.44) / max_accel, 0.0, 1.0) * self.params.NIDEC_GAS_MAX)
+
+    # if not self.CP.enableGasInterceptor and CC.longActive:
+    #   if actuators.gas is not None and actuators.brake is not None:
+    #     pcm_speed = clip(actuators.speed, 0.0, CS.out.vEgo + 5.0)
+    #     pcm_accel = int(clip(actuators.accel / max_accel, 0.0, 1.0) * self.params.NIDEC_GAS_MAX)
 
     if not self.CP.openpilotLongitudinalControl:
       if self.frame % 2 == 0 and self.CP.carFingerprint not in HONDA_BOSCH_RADARLESS:  # radarless cars don't have supplemental message
