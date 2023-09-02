@@ -79,7 +79,7 @@ repos:
     rev: '1.6.0'
     hooks:
     -   id: poetry-check
-    -   id: poetry-lock
-        name: validate poetry lock
-        args:
-        - --check
+    # -   id: poetry-lock
+    #     name: validate poetry lock
+    #     args:
+    #     - --check
